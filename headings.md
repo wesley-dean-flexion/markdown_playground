@@ -13,3 +13,13 @@
 ##### H5
 
 ###### H6
+
+Heading 1
+=========
+
+This is some text under the heading.
+
+Heading 2
+---------
+
+This is some more text under a heading.
