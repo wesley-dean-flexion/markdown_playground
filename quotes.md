@@ -1,7 +1,9 @@
+# Quotes
+
 Deb wrote to me:
 
 >> Wes is awesome!
->> 
+>>
 > I **agree!!!**
 
 In my program, I used the `dork(kwargs**)` function.
