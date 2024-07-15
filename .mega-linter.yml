@@ -1,0 +1,57 @@
+---
+# don't use Mega-Linter to test the reports Mega-Linter created
+ADDITIONAL_EXCLUDED_DIRECTORIES: [report, megalinter-reports, .git]
+
+# don't scan files listed in .gitignore (e.g., node_modules)
+IGNORE_GITIGNORED_FILES: true
+
+# JSCPD was matching a bunch of stuff that didn't need to be matched
+# CSPELL made redundant by Vale's inclusion
+# Lychee, a link checker, wasn't working, plus markdownlinkcheck
+DISABLE_LINTERS: [COPYPASTE_JSCPD, SPELL_CSPELL, SPELL_LYCHEE]
+
+# only scan new / updated files
+VALIDATE_ALL_CODEBASE: false
+
+# don't print the alpaca -- it's cute, but we don't need it in the logs
+PRINT_ALPACA: false
+
+# don't fail on finding (yet)
+DISABLE_ERRORS: true
+
+# use prettier for JavaScript code formatting
+JAVASCRIPT_DEFAULT_STYLE: prettier
+
+# v6 supports SARIF reporters; our organization, however, does not.
+SARIF_REPORTER: false
+
+# only scan the files in This commit, not the entire history of the repo
+REPOSITORY_GITLEAKS_ARGUMENTS: --no-git
+
+# don't scan the .git directory GitHub creates at runtime
+REPOSITORY_TRUFFLEHOG_ARGUMENTS: "--exclude-paths=.trufflehogignore"
+
+# verify external Terraform modules with Checkov
+REPOSITORY_CHECKOV_ARGUMENTS: "--download-external-modules true"
+
+# Grype should acquire CPE data
+REPOSITORY_GRYPE_ARGUMENTS: "--add-cpes-if-none"
+
+# make sure Vale is setup to run with the styles it needs
+SPELL_VALE_PRE_COMMANDS:
+  - command: apk add zip
+    cwd: "workspace"
+  - command: mkdir -p "$(git rev-parse --show-toplevel)/$(sed -Ene 's/^[[:space:]]*StylesPath[[:space:]]*=[[:space:]]*([^#]*)/\1/Ip' < .vale.ini)"
+    cwd: "workspace"
+  - command: rm -rf PlainLanguageMaster.zip PlainLanguage.zip PlainLanguage
+    cwd: "workspace"
+  - command: wget -q "https://github.com/testthedocs/PlainLanguage/archive/refs/heads/master.zip" -O "PlainLanguageMaster.zip"
+    cwd: "workspace"
+  - command: unzip -j -d PlainLanguage PlainLanguageMaster.zip
+    cwd: "workspace"
+  - command: rm -f PlainLanguageMaster.zip
+    cwd: "workspace"
+  - command: zip PlainLanguage.zip PlainLanguage
+    cwd: "workspace"
+  - command: vale sync
+    cwd: "workspace"
