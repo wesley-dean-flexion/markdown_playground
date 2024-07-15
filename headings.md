@@ -1,8 +1,4 @@
-<h1>Heading!</h1>
-
 # H1 Heading
-
-<h2>H2 Heading</h2>
 
 ## H2 Heading
 
@@ -14,12 +10,12 @@
 
 ###### H6
 
+Alternative syntax:
+
+```markdown
 Heading 1
 =========
 
-This is some text under the heading.
-
 Heading 2
 ---------
-
-This is some more text under a heading.
+```
